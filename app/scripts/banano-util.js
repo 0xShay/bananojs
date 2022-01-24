@@ -1,5 +1,7 @@
 'use strict';
 
+const BigNumber = require(`bignumber.js`);
+
 // STARTED TOP nodejs/browser hack
 (function() {
 // FINISHED TOP nodejs/browser hack
@@ -830,7 +832,7 @@
       throw Error(`The server's account balance cannot be retrieved, please try again.`);
     }
 
-    if (BigInt(balanceRaw) < BigInt(amountRaw)) {
+    if (BigNumber(balanceRaw).isLessThan(BigNumber(amountRaw.toString()))) {
       const balance = getAmountPartsFromRaw(balanceRaw, accountPrefix);
       const amount = getAmountPartsFromRaw(amountRaw, accountPrefix);
       const balanceMajorAmount = balance[balance.majorName];
@@ -839,7 +841,7 @@
       throw Error(`The server's account balance of ${balanceMajorAmount} ${balance.majorName}s is too small, cannot withdraw ${amountMajorAmount} ${balance.majorName}s. In raw ${balanceRaw} < ${amountRaw}.`);
     }
 
-    const remaining = BigInt(balanceRaw) - BigInt(amountRaw);
+    const remaining = BigNumber(balanceRaw).minus(BigNumber(amountRaw.toString()));
 
 
     const remainingDecimal = remaining.toString(10);
